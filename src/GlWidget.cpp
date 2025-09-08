@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QOpenGLContext>
 
-const char *GlWidget::VERTEX_SHADER =
+const char* GlWidget::VERTEX_SHADER =
     "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
     "void main()\n"
@@ -10,7 +10,7 @@ const char *GlWidget::VERTEX_SHADER =
     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "}\0";
 
-const char *GlWidget::FRAGMENT_SHADER =
+const char* GlWidget::FRAGMENT_SHADER =
     "#version 330 core\n"
     "out vec4 FragColor;\n"
     "void main()\n"
@@ -56,7 +56,7 @@ void GlWidget::initializeGL() {
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GlWidget::INDICES),
                GlWidget::INDICES, GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void *)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -74,7 +74,7 @@ void GlWidget::paintGL() {
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-void GlWidget::checkShaderCompilation(unsigned int &id) {
+void GlWidget::checkShaderCompilation(unsigned int& id) {
   int success;
   char infoLog[512];
   glGetShaderiv(id, GL_COMPILE_STATUS, &success);
@@ -84,7 +84,7 @@ void GlWidget::checkShaderCompilation(unsigned int &id) {
   }
 }
 
-void GlWidget::checkShaderLinking(unsigned int &id) {
+void GlWidget::checkShaderLinking(unsigned int& id) {
   int success;
   char infoLog[512];
   glGetProgramiv(id, GL_LINK_STATUS, &success);
