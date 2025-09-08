@@ -14,7 +14,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets REQUI
 
 qt_standard_project_setup()
 
-qt_add_executable(model_viewer src/main.cpp)
+qt_add_executable(model_viewer src/main.cpp src/MainWindow.cpp src/GlWidget.cpp)
 
 target_link_libraries(model_viewer PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGL Qt6::OpenGLWidgets)
 

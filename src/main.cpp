@@ -1,7 +1,17 @@
-#include <QDebug>
-#include <iostream>
-int main() {
-  std::cout << "Hello World!" << std::endl;
-  qDebug() << "Hello World from Qt!";
-  return 0;
+#include "MainWindow.h"
+#include <QApplication>
+#include <QSurfaceFormat>
+
+int main(int argc, char *argv[]) {
+  QApplication app(argc, argv);
+
+  QSurfaceFormat format;
+  format.setVersion(3, 3);
+  format.setProfile(QSurfaceFormat::CoreProfile);
+  QSurfaceFormat::setDefaultFormat(format);
+
+  MainWindow *window = new MainWindow();
+  window->resize(1024, 512);
+  window->show();
+  return app.exec();
 }
