@@ -39,3 +39,16 @@ void Camera::UpdateCameraVectors() {
                         // results in slower movement.
   Up = glm::normalize(glm::cross(Right, Front));
 }
+
+void Camera::ProcessKeyboard(cameraMovement direction, float deltaTime) {
+  float velocity = MovementSpeed * deltaTime;
+  if (direction == FORWARD)
+    Position += Front * velocity;
+  if (direction == BACKWARD)
+    Position -= Front * velocity;
+  if (direction == LEFT)
+    Position -= Right * velocity;
+  if (direction == RIGHT)
+    Position += Right * velocity;
+  Position.y = 0.0f;
+}

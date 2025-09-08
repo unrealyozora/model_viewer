@@ -21,12 +21,22 @@ endif()
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets OpenGL OpenGLWidgets REQUIRED)
 
+file(GLOB_RECURSE SOURCES 
+  "src/*.cpp"
+  "third-party/stb_image/*.cpp"
+)
+
 qt_standard_project_setup()
 
-qt_add_executable(model_viewer src/main.cpp src/MainWindow.cpp src/GlWidget.cpp src/Shader/Shader.cpp)
+qt_add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(model_viewer PRIVATE glm::glm)
-target_link_libraries(model_viewer PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGL Qt6::OpenGLWidgets)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/third-party/stb_image)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGL Qt6::OpenGLWidgets)
+
+
+set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC ON)
 
 add_custom_target(copy_compile_commands ALL
   COMMAND ${CMAKE_COMMAND} -E copy_if_different

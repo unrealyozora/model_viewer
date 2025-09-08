@@ -7,6 +7,8 @@
 #include <stdlib.h>
 
 Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath) {
+  initializeOpenGLFunctions();
+
   std::string vertexCode;
   std::string fragmentCode;
   std::ifstream vShaderFile;

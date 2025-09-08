@@ -1,8 +1,9 @@
 #include "MainWindow.h"
 #include <QApplication>
+#include <QDir>
 #include <QSurfaceFormat>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   QApplication app(argc, argv);
 
   QSurfaceFormat format;
@@ -10,7 +11,9 @@ int main(int argc, char *argv[]) {
   format.setProfile(QSurfaceFormat::CoreProfile);
   QSurfaceFormat::setDefaultFormat(format);
 
-  MainWindow *window = new MainWindow();
+  QDir::setCurrent("../");
+
+  MainWindow* window = new MainWindow();
   window->resize(1024, 512);
   window->show();
   return app.exec();
