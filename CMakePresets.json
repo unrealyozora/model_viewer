@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "configurePresets":[
+    {
+      "name": "ninja-msvc",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+	"CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+	"CMAKE_CXX_COMPILER": "cl"
+      },
+      "hidden": false
+    }
+  ],
+  "defaultConfigurationPreset": "ninja-msvc"
+}
