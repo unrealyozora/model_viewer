@@ -8,6 +8,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
   WorldUp = up;
   Yaw = yaw;
   Pitch = pitch;
+  INITIAL_POSITION = position;
   UpdateCameraVectors();
 }
 
@@ -19,6 +20,7 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY,
   WorldUp = glm::vec3(upX, upY, upZ);
   Yaw = yaw;
   Pitch = pitch;
+  INITIAL_POSITION = glm::vec3(posX, posY, posZ);
   UpdateCameraVectors();
 }
 
@@ -67,5 +69,21 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset,
       Pitch = -89.0f;
   }
 
+  UpdateCameraVectors();
+}
+
+void Camera::ProcessMouseWheel(float yoffset) {
+  Zoom -= yoffset;
+  if (Zoom < 1.0f)
+    Zoom = 1.0f;
+  if (Zoom > 45.0f)
+    Zoom = 45.0f;
+  UpdateCameraVectors();
+}
+
+void Camera::InitialPosition() {
+  Position = INITIAL_POSITION;
+  Yaw = YAW;
+  Pitch = PITCH;
   UpdateCameraVectors();
 }

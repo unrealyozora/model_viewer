@@ -12,6 +12,7 @@
 #include <QOpenGLContext>
 #include <QTimer>
 #include <qcursor.h>
+#include <qevent.h>
 #include <qnamespace.h>
 #include <qopenglext.h>
 #include <qwidget.h>
@@ -112,6 +113,8 @@ void GlWidget::keyPressEvent(QKeyEvent* e) {
     // in main widget
   case Qt::Key_Escape:
     QCoreApplication::instance()->quit();
+  case Qt::Key_Space:
+    testCamera->InitialPosition();
   };
 }
 
@@ -143,4 +146,13 @@ void GlWidget::mouseMoveEvent(QMouseEvent* event) {
   if (event->buttons() && Qt::RightButton) {
     testCamera->ProcessMouseMovement(dx, dy);
   }
+}
+
+void GlWidget::wheelEvent(QWheelEvent* event) {
+  // to check
+  float degrees = event->angleDelta().y() / 8;
+  float steps = degrees / 15;
+  if (steps == 0)
+    return;
+  testCamera->ProcessMouseWheel(steps);
 }

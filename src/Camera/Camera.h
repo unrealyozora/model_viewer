@@ -11,6 +11,7 @@ private:
   static constexpr float SPEED = 1.0f;
   static constexpr float SENSITIVITY = 0.1f;
   static constexpr float ZOOM = 45.0f;
+  glm::vec3 INITIAL_POSITION;
 
   void UpdateCameraVectors();
 
@@ -39,6 +40,8 @@ public:
   void ProcessKeyboard(cameraMovement direction, float deltaTime);
   void ProcessMouseMovement(float xoffset, float yoffset,
                             bool constrainPitch = true);
+  void ProcessMouseWheel(float yoffset);
+  void InitialPosition();
 };
 
 #endif // !CAMERA_H
