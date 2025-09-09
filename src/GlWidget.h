@@ -1,6 +1,6 @@
 #include "Camera/Camera.h"
+#include "Model/Model.h"
 #include "Shader/Shader.h"
-#include "Texture/Texture.h"
 #include <QElapsedTimer>
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLWidget>
@@ -47,10 +47,10 @@ public:
   unsigned int VAO, VBO, EBO;
   unsigned char* data;
   int width, height, nrChannels;
-  Shader* testShader;
+  Shader* modelShader;
   Camera* testCamera;
-  Texture* texture1;
-  Texture* texture2;
+  std::string testModelPath;
+  Model* testModel;
   QElapsedTimer* timer;
   float deltaTime = 0.0f;
   float lastFrame = 0.0f;

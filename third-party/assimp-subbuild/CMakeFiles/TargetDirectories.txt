@@ -1,0 +1,3 @@
+C:/Users/tomma/Dev/model_viewer/third-party/assimp-subbuild/CMakeFiles/assimp-populate.dir
+C:/Users/tomma/Dev/model_viewer/third-party/assimp-subbuild/CMakeFiles/edit_cache.dir
+C:/Users/tomma/Dev/model_viewer/third-party/assimp-subbuild/CMakeFiles/rebuild_cache.dir
