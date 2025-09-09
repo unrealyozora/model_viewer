@@ -52,3 +52,20 @@ void Camera::ProcessKeyboard(cameraMovement direction, float deltaTime) {
     Position += Right * velocity;
   Position.y = 0.0f;
 }
+
+void Camera::ProcessMouseMovement(float xoffset, float yoffset,
+                                  bool constrainPitch) {
+  xoffset *= MouseSensitivity;
+  yoffset *= MouseSensitivity;
+  Yaw += xoffset;
+  Pitch += yoffset;
+
+  if (constrainPitch) {
+    if (Pitch > 89.0f)
+      Pitch = 89.0f;
+    if (Pitch < -89.0f)
+      Pitch = -89.0f;
+  }
+
+  UpdateCameraVectors();
+}

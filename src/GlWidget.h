@@ -5,6 +5,7 @@
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLWidget>
 #include <glm/glm.hpp>
+#include <qevent.h>
 
 class GlWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   Q_OBJECT
@@ -61,5 +62,6 @@ protected:
   void paintGL() override;
   void keyPressEvent(QKeyEvent* e) override;
   void keyReleaseEvent(QKeyEvent* e) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
   void processInput(float deltaTime);
 };

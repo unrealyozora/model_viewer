@@ -37,6 +37,8 @@ public:
 
   glm::mat4 GetViewMatrix();
   void ProcessKeyboard(cameraMovement direction, float deltaTime);
+  void ProcessMouseMovement(float xoffset, float yoffset,
+                            bool constrainPitch = true);
 };
 
 #endif // !CAMERA_H

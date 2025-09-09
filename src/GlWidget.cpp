@@ -11,8 +11,10 @@
 #include <QKeyEvent>
 #include <QOpenGLContext>
 #include <QTimer>
+#include <qcursor.h>
 #include <qnamespace.h>
 #include <qopenglext.h>
+#include <qwidget.h>
 #include <stb_image.h>
 
 GlWidget::GlWidget(QWidget* parent) : QOpenGLWidget(parent) {
@@ -23,6 +25,7 @@ GlWidget::GlWidget(QWidget* parent) : QOpenGLWidget(parent) {
 }
 
 void GlWidget::initializeGL() {
+  QCursor::setPos(mapToGlobal(rect().center()));
   setFocus(); // this should be placed in the constructor instead
   timer = new QElapsedTimer();
   timer->start();
@@ -130,5 +133,14 @@ void GlWidget::processInput(float deltaTime) {
   }
   if (keys[Qt::Key_D]) {
     testCamera->ProcessKeyboard(Camera::RIGHT, deltaTime);
+  }
+}
+
+void GlWidget::mouseMoveEvent(QMouseEvent* event) {
+  float dx = -(event->pos().x() - mapFromGlobal(QCursor::pos()).x());
+  float dy = (event->pos().y() - mapFromGlobal(QCursor::pos()).y());
+
+  if (event->buttons() && Qt::RightButton) {
+    testCamera->ProcessMouseMovement(dx, dy);
   }
 }
