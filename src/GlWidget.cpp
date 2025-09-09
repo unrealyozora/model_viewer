@@ -1,6 +1,7 @@
 #include "GlWidget.h"
 #include "Camera/Camera.h"
 #include "Shader/Shader.h"
+#include "Texture/Texture.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
@@ -11,6 +12,7 @@
 #include <QOpenGLContext>
 #include <QTimer>
 #include <qnamespace.h>
+#include <qopenglext.h>
 #include <stb_image.h>
 
 GlWidget::GlWidget(QWidget* parent) : QOpenGLWidget(parent) {
@@ -51,42 +53,8 @@ void GlWidget::initializeGL() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 
-  glGenTextures(1, &texture1);
-  glBindTexture(GL_TEXTURE_2D, texture1);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  stbi_set_flip_vertically_on_load(true);
-  data = stbi_load("assets/container.jpg", &width, &height, &nrChannels, 0);
-  if (data) {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB,
-                 GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-  } else {
-    qDebug() << "Failed to load texture";
-  }
-  stbi_image_free(data);
-  glGenTextures(1, &texture2);
-  glBindTexture(GL_TEXTURE_2D, texture2);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                  GL_LINEAR_MIPMAP_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  data = stbi_load("assets/awesomeface.png", &width, &height, &nrChannels,
-                   STBI_rgb_alpha);
-  if (data) {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-                 GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-  } else {
-    qDebug() << "Failed to laod texture";
-  }
-  stbi_image_free(data);
+  texture1 = new Texture("assets/container.jpg", GL_TEXTURE0);
+  texture2 = new Texture("assets/awesomeface.png", GL_TEXTURE1);
 
   testShader->use();
   testShader->setInt("texture1", 0);
@@ -104,10 +72,10 @@ void GlWidget::paintGL() {
   processInput(deltaTime);
   testShader->use();
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, texture1);
+  texture1->bind();
 
   glActiveTexture(GL_TEXTURE1);
-  glBindTexture(GL_TEXTURE_2D, texture2);
+  texture2->bind();
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

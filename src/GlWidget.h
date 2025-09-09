@@ -1,5 +1,6 @@
 #include "Camera/Camera.h"
 #include "Shader/Shader.h"
+#include "Texture/Texture.h"
 #include <QElapsedTimer>
 #include <QOpenGLFunctions_3_3_Core>
 #include <QOpenGLWidget>
@@ -43,11 +44,12 @@ public:
       glm::vec3(1.5f, 0.2f, -1.5f),   glm::vec3(-1.3f, 1.0f, -1.5f)};
 
   unsigned int VAO, VBO, EBO;
-  unsigned int texture1, texture2;
   unsigned char* data;
   int width, height, nrChannels;
   Shader* testShader;
   Camera* testCamera;
+  Texture* texture1;
+  Texture* texture2;
   QElapsedTimer* timer;
   float deltaTime = 0.0f;
   float lastFrame = 0.0f;
