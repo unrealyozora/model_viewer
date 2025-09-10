@@ -85,3 +85,8 @@ compile_commands.json
 
 build/
 .cache/
+
+.vs/*
+.out/*
+CMakePresets.json
+CMakeUserPresets.json

@@ -14,8 +14,8 @@ FetchContent_Declare(
   GIT_TAG master
 )
 
-set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(glm)
 FetchContent_MakeAvailable(assimp)
@@ -46,6 +46,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/third-par
 target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
 target_link_libraries(${PROJECT_NAME} PRIVATE assimp)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGL Qt6::OpenGLWidgets)
+#target_compile_options(${PROJECT_NAME} PRIVATE /O2)
 
 
 set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC ON)

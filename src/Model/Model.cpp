@@ -1,6 +1,8 @@
 #include "Model.h"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
+#include <chrono>
+#include <filesystem>
 #include <iostream>
 #include <stb_image.h>
 
@@ -94,9 +96,16 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat,
   for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) {
     aiString str;
     mat->GetTexture(type, i, &str);
+    std::filesystem::path texPath = directory;
+    texPath /= str.C_Str();
+    std::string canonicalPath =
+        std::filesystem::weakly_canonical(texPath).string();
+
+    qDebug() << QString::fromStdString(canonicalPath);
     bool skip = false;
     for (unsigned int j = 0; j < textures_loaded.size(); j++) {
-      if (std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0) {
+      if (textures_loaded[j].path == canonicalPath) {
+        qDebug() << "textures loaded in vector";
         textures.push_back(textures_loaded[j]);
         skip = true;
         break;
@@ -104,27 +113,33 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat,
     }
     if (!skip) {
       Texture texture;
-      texture.ID = TextureFromFile(str.C_Str(), directory);
+      texture.ID = TextureFromFile(canonicalPath.c_str());
       texture.type = typeName;
-      texture.path = str.C_Str();
+      texture.path = canonicalPath;
       textures.push_back(texture);
+      textures_loaded.push_back(texture);
     }
   }
   return textures;
 }
 
-unsigned int Model::TextureFromFile(const char* path,
-                                    const std::string& directory, bool gamma) {
+unsigned int Model::TextureFromFile(const char* fullPath, bool gamma) {
   initializeOpenGLFunctions();
-  std::string filename = std::string(path);
-  filename = directory + '/' + filename;
+  std::string filename = std::string(fullPath);
 
   unsigned int textureID;
   glGenTextures(1, &textureID);
 
   int width, height, nrComponents;
+
+  // Starting debug
+  auto start = std::chrono::high_resolution_clock::now();
   unsigned char* data =
       stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+  auto end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double, std::milli> elapsed = end - start;
+
+  qDebug() << "Time to load texture: " << elapsed.count() << "ms";
   if (data) {
     GLenum format;
     if (nrComponents == 1) {
@@ -147,7 +162,7 @@ unsigned int Model::TextureFromFile(const char* path,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     stbi_image_free(data);
   } else {
-    std::cout << "Texture failed to load at path: " << path << std::endl;
+    std::cout << "Texture failed to load at path: " << filename << std::endl;
     stbi_image_free(data);
   }
   return textureID;
