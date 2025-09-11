@@ -12,6 +12,7 @@ class Model : public QOpenGLFunctions_3_3_Core {
 public:
   Model(std::string path);
   void Draw(Shader& shader);
+  unsigned int getMeshesSize();
 
 private:
   std::vector<std::unique_ptr<Mesh>> meshes;

@@ -6,7 +6,10 @@
 #include <iostream>
 #include <stb_image.h>
 
-Model::Model(std::string path) { loadModel(path); }
+Model::Model(std::string path) {
+  loadModel(path);
+  qDebug() << meshes.size();
+}
 
 void Model::Draw(Shader& shader) {
   for (unsigned int i = 0; i < meshes.size(); i++) {
@@ -101,7 +104,7 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat,
     std::string canonicalPath =
         std::filesystem::weakly_canonical(texPath).string();
 
-    qDebug() << QString::fromStdString(canonicalPath);
+    qDebug() << "Texture path: " << canonicalPath;
     bool skip = false;
     for (unsigned int j = 0; j < textures_loaded.size(); j++) {
       if (textures_loaded[j].path == canonicalPath) {
@@ -132,14 +135,8 @@ unsigned int Model::TextureFromFile(const char* fullPath, bool gamma) {
 
   int width, height, nrComponents;
 
-  // Starting debug
-  auto start = std::chrono::high_resolution_clock::now();
   unsigned char* data =
       stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-  auto end = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double, std::milli> elapsed = end - start;
-
-  qDebug() << "Time to load texture: " << elapsed.count() << "ms";
   if (data) {
     GLenum format;
     if (nrComponents == 1) {
@@ -167,3 +164,5 @@ unsigned int Model::TextureFromFile(const char* fullPath, bool gamma) {
   }
   return textureID;
 }
+
+unsigned int Model::getMeshesSize() { return meshes.size(); }

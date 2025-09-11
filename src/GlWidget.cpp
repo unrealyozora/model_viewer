@@ -1,4 +1,5 @@
 #include "GlWidget.h"
+#include "MainWindow.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/fwd.hpp"
@@ -7,19 +8,24 @@
 #include <QKeyEvent>
 #include <QOpenGLContext>
 #include <QTimer>
+#include <gl/gl.h>
 #include <qcursor.h>
 #include <qevent.h>
 #include <qnamespace.h>
 #include <qopenglext.h>
+#include <qtmetamacros.h>
 #include <qwidget.h>
 #include <stb_image.h>
 
-GlWidget::GlWidget(QWidget* parent) : QOpenGLWidget(parent) {
+GlWidget::GlWidget(MainWindow* parent, const std::string& modelPath)
+    : QOpenGLWidget(parent) {
   QTimer* renderTimer = new QTimer(this);
   connect(renderTimer, &QTimer::timeout, this,
           QOverload<>::of(&GlWidget::update));
   renderTimer->start(16);
-  testModelPath = "assets/backpack/backpack.obj";
+  testModelPath = modelPath;
+  connect(parent, &MainWindow::updateModelPath, this,
+          &GlWidget::onModelPathUpdated);
 }
 
 void GlWidget::initializeGL() {
@@ -66,6 +72,7 @@ void GlWidget::paintGL() {
   model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 
   modelShader->setMat4("model", model);
+
   testModel->Draw(*modelShader);
   update();
 }
@@ -121,4 +128,21 @@ void GlWidget::wheelEvent(QWheelEvent* event) {
   if (steps == 0)
     return;
   testCamera->ProcessMouseWheel(steps);
+}
+
+void GlWidget::onModelPathUpdated() {
+  changeModelPath(MainWindow::getModelPath());
+  makeCurrent();
+  if (testModel) {
+    qDebug() << "deleting model";
+    delete testModel;
+    testModel = nullptr;
+  }
+  testModel = new Model(testModelPath);
+  doneCurrent();
+  update();
+}
+
+void GlWidget::changeModelPath(const std::string& path) {
+  testModelPath = path;
 }

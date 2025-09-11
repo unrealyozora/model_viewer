@@ -1,4 +1,5 @@
 #include "Camera/Camera.h"
+#include "MainWindow.h"
 #include "Model/Model.h"
 #include "Shader/Shader.h"
 #include <QElapsedTimer>
@@ -10,7 +11,8 @@
 class GlWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   Q_OBJECT
 public:
-  GlWidget(QWidget* parent);
+  // STRONG ASSUMPTION: PARENT IS ALWAYS OF TYPE MainWindow
+  GlWidget(MainWindow* parent, const std::string& modelPath);
 
   constexpr static float VERTICES[] = {
       -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 0.5f,  -0.5f, -0.5f, 1.0f, 0.0f,
@@ -65,4 +67,7 @@ protected:
   void mouseMoveEvent(QMouseEvent* event) override;
   void wheelEvent(QWheelEvent* event) override;
   void processInput(float deltaTime);
+  void changeModelPath(const std::string& path);
+public slots:
+  void onModelPathUpdated();
 };
