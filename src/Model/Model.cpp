@@ -104,11 +104,9 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat,
     std::string canonicalPath =
         std::filesystem::weakly_canonical(texPath).string();
 
-    qDebug() << "Texture path: " << canonicalPath;
     bool skip = false;
     for (unsigned int j = 0; j < textures_loaded.size(); j++) {
       if (textures_loaded[j].path == canonicalPath) {
-        qDebug() << "textures loaded in vector";
         textures.push_back(textures_loaded[j]);
         skip = true;
         break;

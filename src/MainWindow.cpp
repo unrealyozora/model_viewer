@@ -6,7 +6,7 @@
 #include <QMessageBox>
 
 std::string MainWindow::modelPath = "";
-std::string MainWindow::fallbackPath = "assets/base/base.obj";
+std::string MainWindow::fallbackPath = "assets/backpack/backpack.obj";
 MainWindow::MainWindow() {
   QMenuBar* menuBar = new QMenuBar();
   QMenu* fileMenu = new QMenu("File", this);

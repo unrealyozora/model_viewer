@@ -8,13 +8,6 @@
 #include <QKeyEvent>
 #include <QOpenGLContext>
 #include <QTimer>
-#include <gl/gl.h>
-#include <qcursor.h>
-#include <qevent.h>
-#include <qnamespace.h>
-#include <qopenglext.h>
-#include <qtmetamacros.h>
-#include <qwidget.h>
 #include <stb_image.h>
 
 GlWidget::GlWidget(MainWindow* parent, const std::string& modelPath)
@@ -44,6 +37,7 @@ void GlWidget::initializeGL() {
   testCamera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f),
                           glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
   testModel = new Model(testModelPath);
+  testLight = new Light();
 }
 
 void GlWidget::resizeGL(int w, int h) {
@@ -66,6 +60,15 @@ void GlWidget::paintGL() {
                                 0.1f, 100.0f);
   modelShader->setMat4("view", view);
   modelShader->setMat4("projection", projection);
+
+  // WARNING! CHANGE Camera class attributes visibility (Position shouldnt be
+  // public here)
+  modelShader->setVec3("viewPos", testCamera->Position);
+  modelShader->setVec3("light.direction", testLight->getDirection());
+  modelShader->setVec3("light.ambient", testLight->getAmbient());
+  modelShader->setVec3("light.diffuse", testLight->getDiffuse());
+  modelShader->setVec3("light.specular", testLight->getSpecular());
+  modelShader->setFloat("shininess", 64.0f);
 
   glm::mat4 model = glm::mat4(1.0f);
   model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
