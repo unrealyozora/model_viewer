@@ -1,4 +1,6 @@
 #include "GlWidget.h"
+#include "Light/DirectionalLight.h"
+#include "Light/PointLight.h"
 #include "MainWindow.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -37,7 +39,10 @@ void GlWidget::initializeGL() {
   testCamera = new Camera(glm::vec3(0.0f, 0.0f, 3.0f),
                           glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
   testModel = new Model(testModelPath);
-  testLight = new Light();
+  dirLight = new DirectionalLight();
+  for (int i = 0; i < NR_POINT_LIGHTS; i++) {
+    pointLights[i] = new PointLight();
+  }
 }
 
 void GlWidget::resizeGL(int w, int h) {
@@ -61,13 +66,7 @@ void GlWidget::paintGL() {
   modelShader->setMat4("view", view);
   modelShader->setMat4("projection", projection);
 
-  // WARNING! CHANGE Camera class attributes visibility (Position shouldnt be
-  // public here)
-  modelShader->setVec3("viewPos", testCamera->Position);
-  modelShader->setVec3("light.direction", testLight->getDirection());
-  modelShader->setVec3("light.ambient", testLight->getAmbient());
-  modelShader->setVec3("light.diffuse", testLight->getDiffuse());
-  modelShader->setVec3("light.specular", testLight->getSpecular());
+  modelShader->setVec3("viewPos", testCamera->getPosition());
   modelShader->setFloat("shininess", 64.0f);
 
   glm::mat4 model = glm::mat4(1.0f);
@@ -75,6 +74,11 @@ void GlWidget::paintGL() {
   model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 
   modelShader->setMat4("model", model);
+  modelShader->setInt("NR_POINT_LIGHTS", NR_POINT_LIGHTS);
+  modelShader->setVec3("dirLight.direction", dirLight->getDirection());
+  modelShader->setVec3("dirLight.ambient", dirLight->getAmbient());
+  modelShader->setVec3("dirLight.diffuse", dirLight->getDiffuse());
+  modelShader->setVec3("dirLight.specular", dirLight->getSpecular());
 
   testModel->Draw(*modelShader);
   update();

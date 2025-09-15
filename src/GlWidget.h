@@ -1,5 +1,6 @@
 #include "Camera/Camera.h"
-#include "Light/Light.h"
+#include "Light/DirectionalLight.h"
+#include "Light/PointLight.h"
 #include "MainWindow.h"
 #include "Model/Model.h"
 #include "Shader/Shader.h"
@@ -8,6 +9,7 @@
 #include <QOpenGLWidget>
 #include <glm/glm.hpp>
 
+const int NR_POINT_LIGHTS = 4;
 class GlWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   Q_OBJECT
 public:
@@ -16,13 +18,14 @@ public:
 
   Shader* modelShader;
   Camera* testCamera;
-  Light* testLight;
+  DirectionalLight* dirLight;
   std::string testModelPath;
   Model* testModel;
   QElapsedTimer* timer;
   float deltaTime = 0.0f;
   float lastFrame = 0.0f;
   bool keys[1024] = {false};
+  PointLight* pointLights[NR_POINT_LIGHTS];
 
 protected:
   void initializeGL() override;

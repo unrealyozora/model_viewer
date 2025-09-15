@@ -2,25 +2,25 @@
 #include "glm/ext/matrix_transform.hpp"
 
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch)
-    : Zoom(ZOOM), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY),
-      Front(glm::vec3(0.0f, 0.0f, -1.0f)) {
+    : Front(glm::vec3(0.0f, 0.0f, -1.0f)), Zoom(ZOOM), MovementSpeed(SPEED),
+      MouseSensitivity(SENSITIVITY) {
   Position = position;
+  INITIAL_POSITION = position;
   WorldUp = up;
   Yaw = yaw;
   Pitch = pitch;
-  INITIAL_POSITION = position;
   UpdateCameraVectors();
 }
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY,
                float upZ, float yaw, float pitch)
-    : Zoom(ZOOM), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY),
-      Front(glm::vec3(0.0f, 0.0f, -1.0f)) {
+    : Front(glm::vec3(0.0f, 0.0f, -1.0f)), Zoom(ZOOM), MovementSpeed(SPEED),
+      MouseSensitivity(SENSITIVITY) {
   Position = glm::vec3(posX, posY, posZ);
   WorldUp = glm::vec3(upX, upY, upZ);
   Yaw = yaw;
   Pitch = pitch;
-  INITIAL_POSITION = glm::vec3(posX, posY, posZ);
+  INITIAL_POSITION = Position;
   UpdateCameraVectors();
 }
 
@@ -87,3 +87,14 @@ void Camera::InitialPosition() {
   Pitch = PITCH;
   UpdateCameraVectors();
 }
+
+glm::vec3 Camera::getPosition() { return Position; }
+glm::vec3 Camera::getUp() { return Up; }
+
+glm::vec3 Camera::getFront() { return Front; }
+
+glm::vec3 Camera::getRight() { return Right; }
+
+glm::vec3 Camera::getWorldUp() { return WorldUp; }
+
+glm::vec3 Camera::getInitialPosition() { return INITIAL_POSITION; }
