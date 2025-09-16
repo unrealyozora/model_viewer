@@ -1,5 +1,6 @@
 #version 330 core
 
+const int MAX_POINT_LIGHTS = 10;
 struct Light {
     vec3 ambient;
     vec3 diffuse;
@@ -31,12 +32,11 @@ in vec3 Normal;
 in vec3 FragPos;
 in vec2 TexCoords;
 
-int NR_POINT_LIGHTS = 4;
 uniform sampler2D texture_diffuse1;
 uniform sampler2D texture_specular1;
 uniform float shininess;
 uniform DirectionalLight dirLight;
-uniform PointLight pointLights[4];
+uniform PointLight pointLights[MAX_POINT_LIGHTS];
 uniform vec3 viewPos;
 
 vec3 CalcDirLight(DirectionalLight dirLight, vec3 normal, vec3 viewDir);
@@ -47,9 +47,9 @@ void main() {
     vec3 viewDir = normalize(viewPos - FragPos);
 
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
-    //for (int i = 0; i < NR_POINT_LIGHTS; i++) {
-    //    result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
-    // }
+    //for (int i = 0; i < MAX_POINT_LIGHTS; i++) {
+    //   result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+    //}
     FragColor = vec4(result, 1.0);
 }
 

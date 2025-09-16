@@ -10,6 +10,7 @@
 #include <QKeyEvent>
 #include <QOpenGLContext>
 #include <QTimer>
+#include <qnamespace.h>
 #include <stb_image.h>
 
 GlWidget::GlWidget(MainWindow* parent, const std::string& modelPath)
@@ -40,9 +41,7 @@ void GlWidget::initializeGL() {
                           glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
   testModel = new Model(testModelPath);
   dirLight = new DirectionalLight();
-  for (int i = 0; i < NR_POINT_LIGHTS; i++) {
-    pointLights[i] = new PointLight();
-  }
+  addPointLight(glm::vec3(1.0, 1.0, 1.0));
 }
 
 void GlWidget::resizeGL(int w, int h) {
@@ -74,13 +73,16 @@ void GlWidget::paintGL() {
   model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 
   modelShader->setMat4("model", model);
-  modelShader->setInt("NR_POINT_LIGHTS", NR_POINT_LIGHTS);
   modelShader->setVec3("dirLight.direction", dirLight->getDirection());
   modelShader->setVec3("dirLight.ambient", dirLight->getAmbient());
   modelShader->setVec3("dirLight.diffuse", dirLight->getDiffuse());
   modelShader->setVec3("dirLight.specular", dirLight->getSpecular());
 
   testModel->Draw(*modelShader);
+  for (unsigned int i = 0; i < pointLights.size(); i++) {
+    pointLights[i]->Draw(view, projection);
+  }
+
   update();
 }
 
@@ -89,12 +91,19 @@ void GlWidget::keyPressEvent(QKeyEvent* e) {
     keys[e->key()] = true;
   }
   switch (e->key()) {
-    // i added this case to test, actually it would be better to put it directly
-    // in main widget
+  // i added this case to test, actually it would be better to put it directly
+  // in main widget
+
+  // Test: adding light thorugh apposite class
+  case Qt::Key_J:
+    addPointLight(glm::vec3(-1.0, 1.0, -1.0));
+    break;
   case Qt::Key_Escape:
     QCoreApplication::instance()->quit();
+    break;
   case Qt::Key_Space:
     testCamera->InitialPosition();
+    break;
   };
 }
 
@@ -152,4 +161,9 @@ void GlWidget::onModelPathUpdated() {
 
 void GlWidget::changeModelPath(const std::string& path) {
   testModelPath = path;
+}
+
+void GlWidget::addPointLight(const glm::vec3& position) {
+  PointLight* light = new PointLight(position);
+  pointLights.push_back(light);
 }

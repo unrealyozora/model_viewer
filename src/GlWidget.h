@@ -9,7 +9,6 @@
 #include <QOpenGLWidget>
 #include <glm/glm.hpp>
 
-const int NR_POINT_LIGHTS = 4;
 class GlWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core {
   Q_OBJECT
 public:
@@ -25,7 +24,7 @@ public:
   float deltaTime = 0.0f;
   float lastFrame = 0.0f;
   bool keys[1024] = {false};
-  PointLight* pointLights[NR_POINT_LIGHTS];
+  std::vector<PointLight*> pointLights;
 
 protected:
   void initializeGL() override;
@@ -37,6 +36,7 @@ protected:
   void wheelEvent(QWheelEvent* event) override;
   void processInput(float deltaTime);
   void changeModelPath(const std::string& path);
+  void addPointLight(const glm::vec3& position);
 public slots:
   void onModelPathUpdated();
 };

@@ -5,6 +5,7 @@
 
 class PointLight : public Light {
 private:
+  static bool initialized;
   glm::vec3 position;
   float constant;
   float linear;
@@ -35,17 +36,16 @@ private:
       -0.5f, 0.5f,  0.5f,  0.0f, 0.0f, -0.5f, 0.5f,  -0.5f, 0.0f, 1.0f};
 
   Shader* shader;
-  unsigned int VBO;
-  unsigned int VAO;
+  static unsigned int VBO;
+  static unsigned int VAO;
 
 public:
-  PointLight();
+  PointLight(const glm::vec3& _position);
   const glm::vec3& getPosition() const;
   const float& getConstant() const;
   const float& getLinear() const;
   const float& getQuadratic() const;
-  void Draw(const glm::mat4& view, const glm::mat4& projection,
-            const glm::vec3& position);
+  void Draw(const glm::mat4& view, const glm::mat4& projection);
 };
 
 #endif // !POINT_LIGHT_H
