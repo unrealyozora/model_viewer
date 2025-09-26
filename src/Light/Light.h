@@ -14,6 +14,13 @@ public:
   const glm::vec3& getAmbient() const;
   const glm::vec3& getDiffuse() const;
   const glm::vec3& getSpecular() const;
+
+  void setAmbient(const glm::vec3& _ambient);
+  void setDiffuse(const glm::vec3& _diffuse);
+  void setSpecular(const glm::vec3& _specular);
+
+  void changeColor();
+  glm::vec3 randomColor() const;
 };
 
 #endif // !BASE_LIGHT_H

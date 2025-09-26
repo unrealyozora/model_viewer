@@ -1,9 +1,11 @@
 #include "MainWindow.h"
 #include "GlWidget.h"
+#include "SideMenu.h"
 #include <QFileDialog>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QVBoxLayout>
 
 std::string MainWindow::modelPath = "";
 std::string MainWindow::fallbackPath = "assets/backpack/backpack.obj";
@@ -11,11 +13,20 @@ MainWindow::MainWindow() {
   QMenuBar* menuBar = new QMenuBar();
   QMenu* fileMenu = new QMenu("File", this);
   QAction* openAction = new QAction("Open", this);
-  GlWidget* glWidget = new GlWidget(this, getModelPath());
-  menuBar->addMenu(fileMenu);
   fileMenu->addAction(openAction);
+  menuBar->addMenu(fileMenu);
   setMenuBar(menuBar);
-  setCentralWidget(glWidget);
+
+  QWidget* central = new QWidget(this);
+  QHBoxLayout* hLayout = new QHBoxLayout(central);
+
+  GlWidget* glWidget = new GlWidget(this, getModelPath());
+  hLayout->addWidget(glWidget, 1);
+  setCentralWidget(central);
+  SideMenu* sideMenu = new SideMenu(this, glWidget);
+  sideMenu->setMinimumWidth(70);
+  sideMenu->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  hLayout->addWidget(sideMenu);
 
   connect(openAction, &QAction::triggered, this, &MainWindow::OpenFile);
 }

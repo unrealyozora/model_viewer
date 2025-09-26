@@ -167,3 +167,5 @@ void GlWidget::addPointLight(const glm::vec3& position) {
   PointLight* light = new PointLight(position);
   pointLights.push_back(light);
 }
+
+void GlWidget::randDirColor() { dirLight->changeColor(); }

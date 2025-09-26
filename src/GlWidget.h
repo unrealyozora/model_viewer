@@ -1,3 +1,6 @@
+#ifndef GL_WIDGET_H
+#define GL_WIDGET_H
+
 #include "Camera/Camera.h"
 #include "Light/DirectionalLight.h"
 #include "Light/PointLight.h"
@@ -25,6 +28,7 @@ public:
   float lastFrame = 0.0f;
   bool keys[1024] = {false};
   std::vector<PointLight*> pointLights;
+  void randDirColor();
 
 protected:
   void initializeGL() override;
@@ -40,3 +44,4 @@ protected:
 public slots:
   void onModelPathUpdated();
 };
+#endif // !GL_WIDGET_H

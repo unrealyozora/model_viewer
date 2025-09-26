@@ -9,3 +9,18 @@ Light::Light() {
 const glm::vec3& Light::getAmbient() const { return ambient; }
 const glm::vec3& Light::getDiffuse() const { return diffuse; }
 const glm::vec3& Light::getSpecular() const { return specular; }
+
+void Light::setSpecular(const glm::vec3& _specular) { specular = _specular; }
+void Light::setAmbient(const glm::vec3& _ambient) { ambient = _ambient; }
+void Light::setDiffuse(const glm::vec3& _diffuse) { diffuse = _diffuse; }
+
+void Light::changeColor() {
+  setAmbient(randomColor());
+  setDiffuse(randomColor());
+  setSpecular(randomColor());
+}
+
+glm::vec3 Light::randomColor() const {
+  // TEST! THIS IS NOT RANDOM COLOR, FIX WHEN CONFIRMED WORKING
+  return glm::vec3(0.8f, 0.5f, 0.4f);
+}
